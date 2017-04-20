@@ -40,6 +40,9 @@ namespace CityInfo.API.Controllers
             if (pointOfInterest == null)
                 return BadRequest();
 
+            if (!ModelState.IsValid)
+                return BadRequest();
+            
             var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
             if (city == null)
