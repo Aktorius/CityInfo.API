@@ -22,7 +22,8 @@ namespace CityInfo.API
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appSettings.json", optional:false, reloadOnChange:true)
-                .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional:true, reloadOnChange:true);
+                .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional:true, reloadOnChange:true)
+                .AddEnvironmentVariables();
 
             Configuration = builder.Build();
         }
@@ -47,7 +48,7 @@ namespace CityInfo.API
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
-            var connectionString = @"Server=(localdb)\mssqllocaldb;Database=CityInfoDb;Trusted_Connection=True;";
+            var connectionString = Configuration["connectionStrings:CityInfoConnectionString"];
             services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
         }
 
