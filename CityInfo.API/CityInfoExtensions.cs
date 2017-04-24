@@ -1,71 +1,66 @@
-﻿using CityInfo.API.Models;
+﻿using CityInfo.API.Contexts;
+using CityInfo.API.Entities;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CityInfo.API
 {
-    public class CitiesDataStore
+    public static class CityInfoExtensions
     {
-        public static CitiesDataStore Current { get; } = new CitiesDataStore();
-
-        public List<CityDto> Cities { get; set; }
-
-        public CitiesDataStore()
+        public static void EnsureSeedDataForContext(this CityInfoContext context)
         {
-            Cities = new List<CityDto>()
+            if (context.Cities.Any())
+                return;
+
+            //init seed data
+            var cities = new List<City>()
             {
-                new CityDto()
+                new City()
                 {
-                     Id = 1,
                      Name = "New York City",
                      Description = "The one with that big park.",
-                     PointsOfInterest = new List<PointOfInterestDto>()
+                     PointsOfInterest = new List<PointOfInterest>()
                      {
-                         new PointOfInterestDto() {
-                             Id = 1,
+                         new PointOfInterest() {
                              Name = "Central Park",
                              Description = "The most visited urban park in the United States." },
-                          new PointOfInterestDto() {
-                             Id = 2,
+                          new PointOfInterest() {
                              Name = "Empire State Building",
                              Description = "A 102-story skyscraper located in Midtown Manhattan." },
                      }
                 },
-                new CityDto()
+                new City()
                 {
-                    Id = 2,
                     Name = "Antwerp",
                     Description = "The one with the cathedral that was never really finished.",
-                    PointsOfInterest = new List<PointOfInterestDto>()
+                    PointsOfInterest = new List<PointOfInterest>()
                      {
-                         new PointOfInterestDto() {
-                             Id = 3,
+                         new PointOfInterest() {
                              Name = "Cathedral of Our Lady",
                              Description = "A Gothic style cathedral, conceived by architects Jan and Pieter Appelmans." },
-                          new PointOfInterestDto() {
-                             Id = 4,
+                          new PointOfInterest() {
                              Name = "Antwerp Central Station",
                              Description = "The the finest example of railway architecture in Belgium." },
                      }
                 },
-                new CityDto()
+                new City()
                 {
-                    Id= 3,
                     Name = "Paris",
                     Description = "The one with that big tower.",
-                    PointsOfInterest = new List<PointOfInterestDto>()
+                    PointsOfInterest = new List<PointOfInterest>()
                      {
-                         new PointOfInterestDto() {
-                             Id = 5,
+                         new PointOfInterest() {
                              Name = "Eiffel Tower",
                              Description = "A wrought iron lattice tower on the Champ de Mars, named after engineer Gustave Eiffel." },
-                          new PointOfInterestDto() {
-                             Id = 6,
+                          new PointOfInterest() {
                              Name = "The Louvre",
                              Description = "The world's largest museum." },
                      }
                 }
             };
-        }
 
+            context.Cities.AddRange(cities);
+            context.SaveChanges();
+        }
     }
 }
